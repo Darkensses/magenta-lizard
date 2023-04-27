@@ -10,12 +10,21 @@ import React, { useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import model from "./spectral_circles.glb";
 
-export function Model(props) {
+export function SpectralCircles(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(model);
-  const { actions } = useAnimations(animations, group);
+  const { actions, names } = useAnimations(animations, group); 
+
+  const play = () => {
+    actions[names[0]].startAt(1).play();
+  }
+
+  const stop = () => {
+    actions[names[0]].stop();
+  }
+  
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group scale={0.4} position={[0,-0.1,0]} rotation={[90*Math.PI/180,0,0]} ref={group} {...props} dispose={null} onPointerOver={e => play()} onPointerOut={e => stop()}>
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group name="root">

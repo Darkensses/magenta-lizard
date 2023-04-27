@@ -6,16 +6,17 @@ source: https://sketchfab.com/3d-models/letter-for-santa-bcd4e00de2944401bc164b8
 title: Letter for Santa
 */
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import model from "./letter_for_santa.glb"
 
-export function Model(props) {
+export function LetterForSanta(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(model);
-  const { actions } = useAnimations(animations, group);
+  const { actions, names } = useAnimations(animations, group);
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group scale={10} position={[0,1.4,-5]} ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"

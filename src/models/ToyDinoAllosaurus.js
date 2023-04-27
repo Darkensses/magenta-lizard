@@ -17,9 +17,10 @@ export function ToyDinoAllosaurus(props) {
 
   useFrame(({clock}) => {
     ref.current.rotation.y += Math.sin(clock.getElapsedTime()) * 0.003;    
-  })
+  });
+  
   return (
-    <group ref={ref} {...props} dispose={null} rotation={[0,-15*Math.PI/180,0]}>
+    <group ref={ref} {...props} dispose={null} scale={0.7} rotation={[0,-55*Math.PI/180,0]}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group rotation={[Math.PI / 2, 0, 0]} scale={2}>

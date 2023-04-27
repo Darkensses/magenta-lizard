@@ -6,18 +6,23 @@ source: https://sketchfab.com/3d-models/santa-scene-3december-b663b72039cc4ff687
 title: Santa Scene - 3December
 */
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import model from "./santa_scene_-_3december.glb";
 
-export function Model(props) {
+export function SantaScene(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(
     model
   );
-  const { actions } = useAnimations(animations, group);
+  const { actions, names } = useAnimations(animations, group);
+
+  useEffect(() => {
+    actions[names[0]].startAt(3).play();
+  }, [actions,names]);
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group scale={0.003} position={[0,-0.2,0]} ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group

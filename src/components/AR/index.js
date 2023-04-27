@@ -196,14 +196,15 @@ const ARProvider = forwardRef(
 
     const feedStyle = useMemo(
       () => ({
-        width: "auto",
+        width: "100%",
         maxWidth: "none",
         height: "inherit",
-        marginLeft: `${
-          webcamRef.current?.video?.clientWidth > 0 && ready
-            ? parseInt((width - webcamRef.current.video.clientWidth) / 2)
-            : 0
-        }px`,
+        objectFit: "cover"
+        // marginLeft: `${
+        //   webcamRef.current?.video?.clientWidth > 0 && ready
+        //     ? parseInt((width - webcamRef.current.video.clientWidth) / 2)
+        //     : 0
+        // }px`,
       }),
       [width, ready, webcamRef]
     );
@@ -217,7 +218,7 @@ const ARProvider = forwardRef(
           style={{
             top: 0,
             left: 0,
-            backgroundColor: "black"
+            backgroundColor: "black",
           }}          
         >
           <Webcam
@@ -232,7 +233,7 @@ const ARProvider = forwardRef(
               facingMode: isWebcamFacingUser ? "user" : "environment",
             }}
             style={feedStyle}
-            mirrored={isWebcamFacingUser && flipUserCamera}
+            mirrored={true}//{isWebcamFacingUser && flipUserCamera}
           />
         </Html>
         {children}

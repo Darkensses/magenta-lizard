@@ -6,18 +6,23 @@ source: https://sketchfab.com/3d-models/animated-donkey-kong-original-c9e2d5ca47
 title: Animated Donkey Kong (Original)
 */
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import model from "./animated_donkey_kong_original.glb"
 
-export function Model(props) {
+export function AnimatedDK(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(
     model
   );
-  const { actions } = useAnimations(animations, group);
+  const { actions, names } = useAnimations(animations, group);
+
+  useEffect(() => {
+    actions[names[0]].startAt(3).play();
+  }, [actions,names]);
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group scale={0.004} ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group

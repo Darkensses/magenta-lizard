@@ -17,10 +17,10 @@ export function RobotPlayground(props) {
 
   useEffect(() => {
     actions[names[0]].startAt(3).play();
-  }, [actions,names])
+  }, [actions,names]);
 
   return (
-    <group ref={group} {...props} dispose={null} scale={0.5}>
+    <group position={[0,-0.25, 0]} ref={group} {...props} dispose={null} scale={0.5}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"

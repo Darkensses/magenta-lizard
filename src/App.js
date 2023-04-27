@@ -1,14 +1,21 @@
 import './App.css';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useSpring, animated, config } from '@react-spring/three'
 import { useRef, useState } from 'react';
-import targetMind01 from "./test1.mind";
-import targetMulti from "./testMulti.mind";
-import { RobotPlayground } from './models/RobotPlayground';
-import { ToyDinoAllosaurus } from './models/ToyDinoAllosaurus';
-import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-three/postprocessing'
+import { useFrame } from '@react-three/fiber';
+import { useSpring, animated, config } from '@react-spring/three';
+import { useSpring as useSpringWeb, animated as animatedWeb, config as configWeb} from '@react-spring/web'
+
 import { ARAnchor, ARView } from './components/AR';
 import { Particles } from './FX';
+
+import { RobotPlayground } from './models/RobotPlayground';
+import { AnimatedDK } from './models/AnimatedDK';
+import { ToyDinoAllosaurus } from './models/ToyDinoAllosaurus';
+import { SpectralCircles } from './models/SpectralCircles';
+import { HeartEmoji } from './models/HeartEmoji';
+import { SantaScene } from './models/SantaScene';
+import { LetterForSanta } from './models/LetterForSanta';
+
+import targetMulti from "./targets.mind";
 
 function Box() {
   let refBox = useRef();
@@ -16,7 +23,7 @@ function Box() {
   const { scaleValue } = useSpring({
     scaleValue: active ? 1.5 : 1,
     config: config.slow
-  })
+  });
 
   useFrame( () => {
     refBox.current.rotation.x += 0.01;
@@ -31,80 +38,67 @@ function Box() {
   )
 }
 
-function App2() {  
-  return (
-    <div className="App">
-      <p style={{position: 'absolute'}}>Magenta Lizard 🌸🐊XD</p>
-      
-      <ARView
-        autoplay
-        flipUserCamera={false}
-        imageTargets={targetMind01}
-        filterMinCF={0.0001}
-        filterBeta={0.001} // Speed Coefficient, increase to reduce delay
-        warmupTolerance={0} // Number of continuous frames required for a target being detected to be marked as found
-        missTolerance={5} // Number of continuous frames required for a target not being detected to be marked as lost
-        camera={{fov: 75, near: 0.1, far: 1000, position: [0, 0, 0]}}
-      >
-        <EffectComposer>
-        <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} />
-        </EffectComposer>
-        <directionalLight />
-        <ARAnchor target={0}>
-          <ToyDinoAllosaurus/>          
-        </ARAnchor>          
-      </ARView>
-    </div>
-  );
-}
-
-function AppTest() {
-  return(
-    <div className="App">
-      <p style={{position: 'absolute', zIndex: 1}}>Magenta Lizard 🌸🐊XD</p>
-      <Canvas style={{ background: "hotpink" }}>
-        <Box />
-      </Canvas>
-    </div>
-  )
-}
-
 function App() {
+  const [scan, setScan] = useState(true);
+  const { opacity } = useSpringWeb({
+    opacity: scan ? 1 : 0,
+    config: configWeb.slow
+  })
+
   return (
     <div className="App">
-      <p style={{position: 'absolute', bottom:100, left: "50%"}}>Magenta Lizard 🌸🐊XD</p>
-      <div style={{position: 'absolute', display: 'flex', alignItems: 'center', justifyContent: 'center', left:0,right:0,top:0,bottom:0}}>
-        <div style={{width: "80vw", height:"80vh"}}>
+
+      <animatedWeb.div style={{opacity: opacity, position: 'absolute', display: 'flex', alignItems: 'center', justifyContent: 'center', left:0,right:0,top:0,bottom:0}}>
+        <div style={{width: "90vw", height:"70vh"}}>
           <div className='inner'>
             <div className='scanline'></div>
+            <div className='animation-reversed'></div>
           </div>
         </div>
-      </div>
+      </animatedWeb.div>
       
       <ARView
         autoplay
-        flipUserCamera={false}
+        flipUserCamera={true}
         imageTargets={targetMulti}
-        maxTrack={3}
+        maxTrack={6}
         filterMinCF={0.0001}
         filterBeta={0.001} // Speed Coefficient, increase to reduce delay
         warmupTolerance={0} // Number of continuous frames required for a target being detected to be marked as found
         missTolerance={5} // Number of continuous frames required for a target not being detected to be marked as lost
         camera={{fov: 75, near: 0.1, far: 1000, position: [0, 0, 0]}}
       >
-        
-        <directionalLight />
-        <ARAnchor target={0}>                      
+        <ambientLight />
+        <directionalLight position={[0,0,5]} intensity={1}/>
+        <ARAnchor target={0} onAnchorFound={() => setScan(false)} onAnchorLost={() => setScan(true)}>                      
             <RobotPlayground />
         </ARAnchor> 
 
-        <ARAnchor target={1}>                      
-            <Box/>       
+        <ARAnchor target={1} onAnchorFound={() => setScan(false)} onAnchorLost={() => setScan(true)}>                      
+            <AnimatedDK />       
         </ARAnchor> 
 
-        <ARAnchor target={2}>                      
+        <ARAnchor target={2} onAnchorFound={() => setScan(false)} onAnchorLost={() => setScan(true)}>                      
             <ToyDinoAllosaurus/>
             <Particles count={200}/>        
+        </ARAnchor>
+
+        <ARAnchor target={3} onAnchorFound={() => setScan(false)} onAnchorLost={() => setScan(true)}>                      
+            <SpectralCircles />       
+        </ARAnchor> 
+
+        <ARAnchor target={4} onAnchorFound={() => setScan(false)} onAnchorLost={() => setScan(true)}>
+          <HeartEmoji position={[-0.8,0.1,0]} rotation={[0,180*Math.PI/180,0]}/>
+          <HeartEmoji position={[0.8,0.15,0]} rotation={[0,180*Math.PI/180,0]}/>
+          <HeartEmoji position={[-0.5,0,0]} rotation={[0,180*Math.PI/180,0]}/>
+          <HeartEmoji position={[0.5,-0.1,0]} rotation={[0,180*Math.PI/180,0]}/>
+          <HeartEmoji position={[0,0.2,0]} rotation={[0,180*Math.PI/180,0]}/>
+          <HeartEmoji position={[0,-0.2,0]} rotation={[0,180*Math.PI/180,0]}/>
+        </ARAnchor> 
+
+        <ARAnchor target={5} onAnchorFound={() => setScan(false)} onAnchorLost={() => setScan(true)}>                      
+            <SantaScene />
+            <LetterForSanta />   
         </ARAnchor> 
 
                   

@@ -6,16 +6,21 @@ source: https://sketchfab.com/3d-models/casey-ee2007e6c1c74aa2828eeebd28af9eb1
 title: Casey
 */
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import model from "./casey.glb"
 
-export function Model(props) {
+export function Casey(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF(model);
-  const { actions } = useAnimations(animations, group);
+  const { actions, names } = useAnimations(animations, group);
+
+  useEffect(() => {
+    actions[names[0]].fadeIn().play();
+  }, [actions,names]);
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group scale={0.5} position={[0,-0.1,-5]} ref={group} {...props} dispose={null}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"

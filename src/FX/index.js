@@ -112,7 +112,7 @@ void main() {
 
   gl_PointSize = size;
   // Size attenuation;
-  gl_PointSize *= (40000.0 / - viewPosition.z);
+  gl_PointSize *= (10000.0 / - viewPosition.z);
 }
 
 `
